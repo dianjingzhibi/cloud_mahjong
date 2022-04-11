@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html>
+
+
+<head>
+    <meta charset="utf-8">
+    <title>噶篮子</title>
+    <style>
+        .display{display:block;}
+        .hide{display:none;}
+        .mt{margin-top:10px;}
+    </style>
+
+    <script type="text/javascript">
+        var ws=null;
+        function WebSocketTest()
+        {
+            if ("WebSocket" in window)
+            {
+                console.log("您的浏览器支持 WebSocket!");
+                ws= new WebSocket("ws://localhost:8080/ws");
+                ws.onopen = function()
+                {
+                    console.log("与服务器建立连接成功！")
+                };
+                ws.onmessage = function (evt)
+                {
+                    let received_msg = JSON.parse(evt.data);
+                   switch (received_msg.action){
+                       case "login":
+                           var text = document.getElementById("textareas").value;
+                           var msg =received_msg.msg
+                           document.getElementById("textareas").value=text+"\n"+msg;
+                           break;
+                       case "fail":
+                           var text = document.getElementById("textareas").value;
+                           var msg =received_msg.msg
+                           document.getElementById("textareas").value=text+"\n"+msg;
+                           break;
+                       case "start":
+                           var text = document.getElementById("textareas").value;
+                           var msg =received_msg.msg
+                           document.getElementById("textareas").value=text+"\n"+msg;
+                           break;
+                       case "startNext":
+                           var text = document.getElementById("textareas").value;
+                           var msg =received_msg.msg
+                           document.getElementById("textareas").value=text+"\n"+msg;
+                           var element = document.getElementById("touzi");
+                           element.className = "show";
+                           break;
+                       case "beforeDown":
+                           var text = document.getElementById("textareas").value;
+                           var msg =received_msg.msg
+                           document.getElementById("textareas").value=text+"\n"+msg;
+
+
+                           var element = document.getElementById("touzi");
+                           element.className = "hide";
+
+
+                           var xiazhujine = document.getElementById("xiazhujine");
+                           xiazhujine.className = "show";
+
+                           var xiazhu = document.getElementById("xiazhu");
+                           xiazhu.className = "xiazhu";
+
+                           break;
+                       case "gameStart":
+                           var text = document.getElementById("textareas").value;
+                           var msg =received_msg.msg
+                           document.getElementById("textareas").value=text+"\n"+msg;
+                           break;
+                       case "xz":
+                           var text = document.getElementById("textareas").value;
+                           var msg =received_msg.msg
+                           document.getElementById("textareas").value=text+"\n"+msg;
+                           break;
+                       case "gameOver":
+                           var text = document.getElementById("textareas").value;
+                           var msg =received_msg.msg
+                           document.getElementById("textareas").value=text+"\n"+msg;
+                           break;
+
+                   }
+                };
+
+                ws.onclose = function()
+                {
+                    // 关闭 websocket
+                };
+            }
+
+            else
+            {
+                // 浏览器不支持 WebSocket
+                alert("您的浏览器不支持 WebSocket!");
+            }
+        }
+        WebSocketTest();
+        let login=function (){
+            let name=document.getElementById("name").value
+            var  obj={"name":name,"action":"login"};
+            ws.send(JSON.stringify(obj));
+            var element = document.getElementById("hidef");
+            element.className = "hide";
+            var element1 = document.getElementById("hideff");
+            element1.className = "show";
+        }
+
+        let start=function () {
+            let name = document.getElementById("name").value
+            var obj = { "name": name, "action": "start"};
+            ws.send(JSON.stringify(obj));
+        }
+
+        let startNext=function () {
+            let name = document.getElementById("name").value
+            var obj =  {"name": name, "action": "next"};
+            ws.send(JSON.stringify(obj));
+        }
+
+        let  xiazhu=function (){
+            let name = document.getElementById("name").value
+            let amount = document.getElementById("xiazhuNumber").value
+
+            var obj =  {"name": name, "action": "xiazhu","amount":amount};
+            ws.send(JSON.stringify(obj));
+        }
+
+        let gandao=function (){
+
+        }
+
+    </script>
+
+</head>
+<body>
+
+<div id="sse">
+    <div align="center" id="hidef">
+            昵称：<input id="name"/>
+            <button onclick="login()">登录</button>
+    </div>
+
+    <div align="center" id="hideff"  class="hide">
+        <span></span>
+        <textarea id="textareas" readonly style="width: 797px; height: 382px;"></textarea>
+        <br/>
+        <div align="center">
+            <div  class="hide" id="xiazhujine">
+                下注金额:<input id="xiazhuNumber" type="number" value="2"/>
+            </div>
+            <button onclick="start()">开始</button>
+            <button onclick="startNext()"  id="touzi" class="hide">摇骰子</button>
+            <button onclick="xiazhu()"  id="xiazhu" class="hide">下注</button>
+            <button onclick="xuzhuang()"  id="xuzhuang" class="hide">是否续庄，续庄翻倍</button>
+            <button onclick="zhengchangjieshu()"  id="zhengchangjieshu" class="hide">正常结束，是否继续</button>
+            <!--            <button onclick="gandao()"  id="gandao" class="hide">干倒</button>-->
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>
